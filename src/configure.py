@@ -133,11 +133,11 @@ class ArgumentParser( argparse.ArgumentParser ):
             for option in self.options:
                 for item in option["flags"]:
                     if "choices" in option:
-                        temp = [ str(opt) for opt in option["choices"] ]
                         if "default" in option:
-                            usage += [ "[%s {%s} *%s]"%(item, ", ".join(temp), "Depend" if option["default"] == None else str(option["default"])) ]
+                            temp = [ "*"+str(opt) if opt == option["default"] else str(opt) for opt in option["choices"] ]
                         else:
-                            usage += [ "[%s {%s}]"%(item, ", ".join(temp)) ]
+                            temp = [ str(opt) for opt in option["choices"] ]
+                        usage += [ "[%s {%s}]"%(item, ", ".join(temp)) ]
                         continue
 
                     if "metavar" in option:
@@ -303,7 +303,8 @@ def load_arguments():
 
     # machine config setup
     parser.add_argument( "--machine", type=str, metavar="MACHINE",
-                         default="eureka_intel",
+                         # default="eureka_intel",
+                         default="gundam_gnu",
                          help="Select the MACHINE.config file under ../configs directory. \nChoice: [eureka_intel, YOUR_MACHINE_NAME] => "
                        )
 
@@ -325,7 +326,7 @@ def load_arguments():
                          depend={"model":"HYDRO"},
                          constraint={ "RTVD":{"unsplit_gravity":False, "passive":0, "dual":NONE_STR, "eos":"GAMMA"},
                                       "CTU":{"eos":"GAMMA"} },
-                         help="The hydrodynamic/MHD integrator. MHD only supports MHM, MHM_RP and CTU.\n"
+                         help="The hydrodynamic/MHD integrator. MHD only supports MHM_RP and CTU.\n"
                        )
 
     parser.add_argument( "--slope", type=str, metavar="TYPE", gamer_name="LR_SCHEME",
@@ -335,11 +336,11 @@ def load_arguments():
                        )
 
     parser.add_argument( "--flux", type=str, metavar="TYPE", gamer_name="RSOLVER",
-                         default=None, choices=["EXACT", "ROE", "HLLE", "HLLC", "HLLD"],
+                         default="ROE", choices=["EXACT", "ROE", "HLLE", "HLLC", "HLLD"],
                          depend={"model":"HYDRO"},
                          constraint={ "ROE":{"eos":"GAMMA"},
                                       "EXACT":{"eos":"GAMMA"} },
-                         help="The Riemann solver. Pure hydro: EXACT/ROE/HLLE/HLLC^, MHD: ROE/HLLE/HLLD^ (^ indicates the recommended and default solvers). Useless for RTVD.\n"
+                         help="The Riemann solver. Pure hydro: EXACT/ROE/HLLE/HLLC^, MHD: ROE/HLLE/HLLD^ (^ indicates the recommended solvers). Useless for RTVD.\n"
                        )
 
     parser.add_argument( "--dual", type=str, metavar="TYPE", gamer_name="DUAL_ENERGY",
@@ -352,7 +353,7 @@ def load_arguments():
     parser.add_argument( "--mhd", type=str2bool, metavar="BOOLEAN", gamer_name="MHD",
                          default=False,
                          depend={"model":"HYDRO"},
-                         constraint={ True:{"flu_scheme":["MHM", "MHM_RP", "CTU"], "flux":["ROE", "HLLE", "HLLD"]},
+                         constraint={ True:{"flu_scheme":["MHM_RP", "CTU"], "flux":["ROE", "HLLE", "HLLD"]},
                                      False:{"flux":["EXACT", "ROE", "HLLE", "HLLC"]} },
                          help="Magnetohydrodynamics.\n"
                        )
@@ -421,7 +422,7 @@ def load_arguments():
                          default=None,
                          depend={"gravity":True},
                          constraint={ True:{"model":"HYDRO"} },
-                         help="Use unsplitting method to couple gravity to the target model (recommended). Supported only for <--model=HYDRO>. When <--model=HYDRO>, the default is True.\n"
+                         help="Use unsplitting method to couple gravity to the target model (recommended). Supported only for <--model=HYDRO>.\n"
                        )
 
     parser.add_argument( "--comoving", type=str2bool, metavar="BOOLEAN", gamer_name="COMOVING",
@@ -473,6 +474,15 @@ def load_arguments():
                          help="Enable Grackle, a chemistry and radiative cooling library. Must set <--passive> according to the primordial chemistry network set by GRACKLE_PRIMORDIAL. Please enable OpenMP when compiling Grackle (by 'make omp-on').\n"
                        )
 
+    # A.6 ray-tracing
+    parser.add_argument( "--ray_tracing", type=str2bool, metavar="BOOLEAN", gamer_name="RADIATIVE_TRANSER",
+                         default=False,
+                         # constraint={ True:{"model":"HYDRO", "eos":"GAMMA"} },
+                         depend={"particle":True, "grackle":True},
+                         help="Enable Ray Tracing. Using Photon Package to represent the incident radiation field. This module will compute the interactions bewteen gas and photon, and pass the ionisation and heating rates to Grackle. Grackle is the default ionisation solver. \n"
+                       )
+
+
     # B. miscellaneous options
     parser.add_argument( "--nlevel", type=int, metavar="INTEGER", gamer_name="NLEVEL",
                          default=10,
@@ -496,7 +506,7 @@ def load_arguments():
 
     parser.add_argument( "--bitwise_reproducibility", type=str2bool, metavar="BOOLEAN", gamer_name="BITWISE_REPRODUCIBILITY",
                          default=None,
-                         help="Enable bitwise reproducibility. When <--debug=True>, the default is True.\n"
+                         help="Enable bitwise reproducibility.\n"
                        )
 
     parser.add_argument( "--timing", type=str2bool, metavar="BOOLEAN", gamer_name="TIMING",
@@ -582,7 +592,8 @@ def load_arguments():
 
     parser.add_argument( "--gpu_arch", type=str, metavar="TYPE", gamer_name="GPU_ARCH",
                          depend={"gpu":True},
-                         default="TURING", choices=["FERMI", "KEPLER", "MAXWELL", "PASCAL", "VOLTA", "TURING", "AMPERE"],
+                         default="AMPERE", choices=["FERMI", "KEPLER", "MAXWELL", "PASCAL", "VOLTA", "TURING", "AMPERE"],
+                         # default="TURING", choices=["FERMI", "KEPLER", "MAXWELL", "PASCAL", "VOLTA", "TURING", "AMPERE"],
                          help="Select the architecture of GPU.\n"
                        )
 
@@ -632,9 +643,6 @@ def set_conditional_defaults( args ):
 
     if args["bitwise_reproducibility"] == None:
         args["bitwise_reproducibility"] = True if args["debug"] else False
-
-    if args["flux"] == None:
-        args["flux"] = "HLLD" if args["mhd"] else "HLLC"
 
     return args
 
