@@ -477,8 +477,7 @@ def load_arguments():
     # A.6 ray-tracing
     parser.add_argument( "--ray_tracing", type=str2bool, metavar="BOOLEAN", gamer_name="RADIATIVE_TRANSER",
                          default=False,
-                         # constraint={ True:{"model":"HYDRO", "eos":"GAMMA"} },
-                         depend={"particle":True, "grackle":True},
+                         constraint={ True:{"grackle":True, "particle":True} },
                          help="Enable Ray Tracing. Using Photon Package to represent the incident radiation field. This module will compute the interactions bewteen gas and photon, and pass the ionisation and heating rates to Grackle. Grackle is the default ionisation solver. \n"
                        )
 
@@ -744,7 +743,8 @@ def validation( paths, depends, constraints, **kwargs ):
         if kwargs["star_formation"] and kwargs["store_par_acc"] and not kwargs["store_pot_ghost"]:
             color_print("ERROR: <--store_pot_ghost> must be enabled when <--star_formation> and <--store_par_acc> are enabled.", BCOLOR.FAIL)
             success = False
-        if not kwargs["gravity"] and not kwargs["tracer"]:
+        # if not kwargs["gravity"] and not kwargs["tracer"]:
+        if not kwargs["gravity"] and not kwargs["tracer"] and not kwargs["ray_tracing"]:
             color_print("ERROR: At least one of <--gravity> or <--tracer> must be enabled for <--particle>.", BCOLOR.FAIL)
             success = False
         if kwargs["par_attribute"] < 0:
