@@ -243,6 +243,19 @@ void Output_DumpData( const int Stage )
    }
 #  endif
 
+// set the acceleration of PhotonPackages and Radiation Sources to zero to make outputs deterministic
+#  if ( defined RADIATIVE_TRANSER )
+   for (long p=0; p<amr->Par->NPar_AcPlusInac; p++)
+   {
+      if (( amr->Par->Type[p] == PTYPE_PHOTONPACLAGE ) || ( amr->Par->Type[p] == PTYPE_RADIATIONSOURCE))
+      {
+         amr->Par->AccX[p] = (real)0.0;
+         amr->Par->AccY[p] = (real)0.0;
+         amr->Par->AccZ[p] = (real)0.0;
+      }
+   }
+#  endif
+
 
 // output data
    if ( OutputData || OutputData_RunTime || OutputData_Walltime )
