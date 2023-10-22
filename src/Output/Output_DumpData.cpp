@@ -247,7 +247,7 @@ void Output_DumpData( const int Stage )
 #  if ( defined RADIATIVE_TRANSER )
    for (long p=0; p<amr->Par->NPar_AcPlusInac; p++)
    {
-      if (( amr->Par->Type[p] == PTYPE_PHOTONPACLAGE ) || ( amr->Par->Type[p] == PTYPE_RADIATIONSOURCE))
+      if (( amr->Par->Type[p] == PTYPE_PHOTONPACKAGE ) || ( amr->Par->Type[p] == PTYPE_RADIATIONSOURCE))
       {
          amr->Par->AccX[p] = (real)0.0;
          amr->Par->AccY[p] = (real)0.0;
