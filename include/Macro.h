@@ -513,7 +513,7 @@
 #  define  PTYPE_GENERIC_MASSIVE (real)1
 #  define  PTYPE_DARK_MATTER     (real)2
 #  define  PTYPE_STAR            (real)3
-#  define  PTYPE_PHOTONPACLAGE   (real)4
+#  define  PTYPE_PHOTONPACKAGE   (real)4
 #  define  PTYPE_RADIATIONSOURCE (real)5
 
 # ifdef GRAVITY
