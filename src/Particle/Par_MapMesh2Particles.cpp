@@ -56,8 +56,8 @@ void Par_MapMesh2Particles( const double EdgeL[3], const double EdgeR[3],
       }
       else
       {
-//       skip tracer particles
-         if ( ParType[ParID] == PTYPE_TRACER )
+//       skip tracer particles and PhotonPackage and RadiationSource
+         if ( ParType[ParID] == PTYPE_TRACER || ParType[ParID] == PTYPE_PHOTONPACKAGE || ParType[ParID] == PTYPE_RADIATIONSOURCE)
             continue;
       }
 
