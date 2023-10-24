@@ -42,7 +42,7 @@ void Par_Aux_InitCheck()
 
 //    only support tracer particles when disabling GRAVITY
 #     ifndef GRAVITY
-      if ( Type[ParID] != PTYPE_TRACER )
+      if ( Type[ParID] != PTYPE_TRACER && Type[ParID] != PTYPE_PHOTONPACKAGE && Type[ParID] != PTYP_RADIATIONSOURCE )
          Aux_Error( ERROR_INFO, "Type[%ld] = %d != PTYPE_TRACER (%d) when disabling GRAVITY !!\n", ParID, (int)Type[ParID], (int)PTYPE_TRACER );
 #     endif
 
@@ -56,6 +56,14 @@ void Par_Aux_InitCheck()
 #     ifdef TRACER
       if ( Type[ParID] == PTYPE_TRACER  &&  Mass[ParID] != (real)0.0 )
          Aux_Error( ERROR_INFO, "Tracer[%ld] has non-zero mass (%13.7e) !!\n", ParID, Mass[ParID] );
+#     endif
+
+//    RT particles (PhotonPackage and Radiation Source) must be massless  
+#     ifdef RADIATIVE_TRANSER
+      if ( Type[ParID] == PTYPE_PHOTONPACKAGE  &&  Mass[ParID] != (real)0.0 )
+         Aux_Error( ERROR_INFO, "Photon Package particle [%ld] has non-zero mass (%13.7e) !!\n", ParID, Mass[ParID] );
+      if ( Type[ParID] == PTYPE_RADIATIONSOURCE  &&  Mass[ParID] != (real)0.0 )
+         Aux_Error( ERROR_INFO, "Radiation Source particle [%ld] has non-zero mass (%13.7e) !!\n", ParID, Mass[ParID] );
 #     endif
 
       for (int d=0; d<3; d++)
