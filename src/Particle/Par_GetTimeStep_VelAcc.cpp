@@ -168,7 +168,7 @@ void Par_GetTimeStep_VelAcc( double &dt_vel, double &dt_acc, const int lv )
                }
 
 //             don't check acceleration for tracer particles
-               if ( UseAcc  &&  Typ_Copy[p] != PTYPE_TRACER )
+               if ( UseAcc  &&  Typ_Copy[p] != PTYPE_TRACER &&  ParType[ParID] != PTYPE_PHOTONPACKAGE &&  ParType[ParID] != PTYPE_RADIATIONSOURCE )
                {
                   for (int d=0; d<3; d++)
                   MaxAcc_OMP[TID] = MAX( MaxAcc_OMP[TID], FABS(Acc_Copy[d][p]) );
@@ -196,7 +196,7 @@ void Par_GetTimeStep_VelAcc( double &dt_vel, double &dt_acc, const int lv )
                }
 
 //             don't check acceleration for tracer particles
-               if ( UseAcc  &&  ParType[ParID] != PTYPE_TRACER )
+               if ( UseAcc  &&  ParType[ParID] != PTYPE_TRACER &&  ParType[ParID] != PTYPE_PHOTONPACKAGE &&  ParType[ParID] != PTYPE_RADIATIONSOURCE )
                {
                   for (int d=0; d<3; d++)
                   MaxAcc_OMP[TID] = MAX( MaxAcc_OMP[TID], FABS(Acc[d][ParID]) );
