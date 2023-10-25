@@ -186,7 +186,10 @@ void Par_UpdateParticle( const int lv, const double TimeNew, const double TimeOl
    long ParID;
    real Acc_Temp[3], dt, dt_half;
 
-   long ptype_tracer = (long)PTYPE_TRACER;
+   long ptype_tracer = (long)round(PTYPE_TRACER)         ;
+   long ptype_pp     = (long)round(PTYPE_PHOTONPACKAGE)  ;
+   long ptype_rs     = (long)round(PTYPE_RADIATIONSOURCE);
+
 
 // loop over all **real** patch groups
 #  pragma omp for schedule( PAR_OMP_SCHED, PAR_OMP_SCHED_CHUNK )
@@ -199,7 +202,7 @@ void Par_UpdateParticle( const int lv, const double TimeNew, const double TimeOl
 
       for (int PID=PID0; PID<PID0+8; PID++)
       {
-         if ( amr->patch[0][lv][PID]->NPar - amr->patch[0][lv][PID]->NParType[ptype_tracer] > 0 )
+         if ( amr->patch[0][lv][PID]->NPar - amr->patch[0][lv][PID]->NParType[ptype_tracer] - amr->patch[0][lv][PID]->NParType[ptype_pp] - amr->patch[0][lv][PID]->NParType[ptype_rs] > 0 )
          {
             if ( UpdateStep == PAR_UPSTEP_CORR )
             {
@@ -207,7 +210,7 @@ void Par_UpdateParticle( const int lv, const double TimeNew, const double TimeOl
                {
                   ParID = amr->patch[0][lv][PID]->ParList[p];
 
-                  if ( ParTime[ParID] < (real)0.0  &&  ParType[ParID] != PTYPE_TRACER )
+                  if ( ParTime[ParID] < (real)0.0  &&  ParType[ParID] != PTYPE_TRACER && ParType[ParID] != PTYPE_PHOTONPACKAGE && ParType[ParID] != PTYPE_RADIATIONSOURCE )
                   {
                      GotYou = true;
                      break;
@@ -235,7 +238,7 @@ void Par_UpdateParticle( const int lv, const double TimeNew, const double TimeOl
          {
             for (int PID=PID0, P=0; PID<PID0+8; PID++, P++)
             {
-               if ( amr->patch[0][lv][PID]->NPar - amr->patch[0][lv][PID]->NParType[ptype_tracer] == 0 )
+               if ( amr->patch[0][lv][PID]->NPar - amr->patch[0][lv][PID]->NParType[ptype_tracer] - amr->patch[0][lv][PID]->NParType[ptype_pp] - amr->patch[0][lv][PID]->NParType[ptype_rs] == 0 )
                   continue;   // skip patches with no massive particles
 
 //             temporal interpolation is required for correcting the velocity of particles just crossing
@@ -264,7 +267,7 @@ void Par_UpdateParticle( const int lv, const double TimeNew, const double TimeOl
 
       for (int PID=PID0, P=0; PID<PID0+8; PID++, P++)
       {
-         if ( amr->patch[0][lv][PID]->NPar - amr->patch[0][lv][PID]->NParType[ptype_tracer] == 0 )
+         if ( amr->patch[0][lv][PID]->NPar - amr->patch[0][lv][PID]->NParType[ptype_tracer] - amr->patch[0][lv][PID]->NParType[ptype_pp] - amr->patch[0][lv][PID]->NParType[ptype_rs] == 0 )
             continue;   // skip patches with no massive particles
 
          if ( !UseStoredAcc )
@@ -320,8 +323,8 @@ void Par_UpdateParticle( const int lv, const double TimeNew, const double TimeOl
          {
             ParID = amr->patch[0][lv][PID]->ParList[p];
 
-//          skip tracer particles
-            if ( ParType[ParID] == PTYPE_TRACER )
+//          skip tracer, pp and rs particles
+            if ( ParType[ParID] == PTYPE_TRACER || ParType[ParID] == PTYPE_PHOTONPACKAGE || ParType[ParID] == PTYPE_RADIATIONSOURCE )
                continue;
 
 //          4. determine time-step and skip particles with zero or negative time-step
