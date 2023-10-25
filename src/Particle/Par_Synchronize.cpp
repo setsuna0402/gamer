@@ -152,7 +152,7 @@ int Par_Synchronize( const double SyncTime, const ParSync_t SyncOption )
          {
             ParPos[d][p] += ParVel[d][p]*dt;
 //          only accelerate massive particles
-            if ( ParType[p] != PTYPE_TRACER )
+            if ( ParType[p] != PTYPE_TRACER && ParType[p] != PTYPE_PHOTONPACKAGE &&  ParType[p] != PTYPE_RADIATIONSOURCE )
                ParVel[d][p] += ParAcc[d][p]*dt;
          }
 
