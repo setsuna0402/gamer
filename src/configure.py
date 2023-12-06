@@ -477,7 +477,9 @@ def load_arguments():
     # A.6 ray-tracing
     parser.add_argument( "--ray_tracing", type=str2bool, metavar="BOOLEAN", gamer_name="RADIATIVE_TRANSER",
                          default=False,
-                         constraint={ True:{"grackle":True, "particle":True} },
+                         # we don't need grackle currently.
+                         # constraint={ True:{"grackle":True, "particle":True} },
+                         constraint={ True:{"particle":True} },
                          help="Enable Ray Tracing. Using Photon Package to represent the incident radiation field. This module will compute the interactions bewteen gas and photon, and pass the ionisation and heating rates to Grackle. Grackle is the default ionisation solver. \n"
                        )
 
