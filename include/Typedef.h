@@ -57,6 +57,7 @@ const TestProbID_t
    TESTPROB_HYDRO_CDM_LSS                      =  100,
    TESTPROB_HYDRO_ZELDOVICH                    =  101,
    TESTPROB_ELBDM_EXTPOT                       = 1000;
+   TESTPROB_RT_UNIFORM_RHO                     = 2000;
 
 
 // program initialization options

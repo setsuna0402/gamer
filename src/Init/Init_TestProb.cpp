@@ -29,6 +29,7 @@ void Init_TestProb_Hydro_EnergyPowerSpectrum();
 
 void Init_TestProb_ELBDM_ExtPot();
 
+void Init_TestProb_RT_Uniform_Rho();
 
 
 
@@ -78,6 +79,8 @@ void Init_TestProb()
 
       case TESTPROB_ELBDM_EXTPOT :                       Init_TestProb_ELBDM_ExtPot();                      break;
 
+      case TESTPROB_RT_UNIFORM_RHO :                     Init_TestProb_RT_Uniform_Rho();                    break;
+      
       default: Aux_Error( ERROR_INFO, "unsupported TESTPROB_ID (%d) !!\n", TESTPROB_ID );
    } // switch( TESTPROB_ID )
 
