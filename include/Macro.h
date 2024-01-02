@@ -516,6 +516,12 @@
 #  define  PTYPE_PHOTONPACKAGE   (real)4
 #  define  PTYPE_RADIATIONSOURCE (real)5
 
+// define RT_NBIN if not set in the Makefile
+# if defined(RADIATIVE_TRANSER) && not defined(RT_NBIN)
+#  define RT_NBIN                      10
+# endif
+
+
 # ifdef GRAVITY
 #  define MASSIVE_PARTICLES
 # endif

@@ -482,6 +482,12 @@ def load_arguments():
                          constraint={ True:{"particle":True} },
                          help="Enable Ray Tracing. Using Photon Package to represent the incident radiation field. This module will compute the interactions bewteen gas and photon, and pass the ionisation and heating rates to Grackle. Grackle is the default ionisation solver. \n"
                        )
+    parser.add_argument( "--ray_number_bins", type=int, metavar="INTEGER", gamer_name="RT_NBIN",
+                         default=10,
+                         depend={"ray_tracing":True},
+                         help="Set the number of energy bins used in ray-tracing.\n"
+                       )
+
 
 
     # B. miscellaneous options
