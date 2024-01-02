@@ -12,7 +12,7 @@ extern bool   ParTest_Use_Massive;
 
 
 //-------------------------------------------------------------------------------------------------------
-// Function    :  Par_Init_ByFunction_ParticleTest
+// Function    :  Par_Init_ByFunction_ParticleTest_RT
 // Description :  Initialize all particle attributes for the particle test problem
 //                --> Modified from "Par_Init_ByFile.cpp"
 //
@@ -50,7 +50,7 @@ extern bool   ParTest_Use_Massive;
 //
 // Return      :  ParMass, ParPosX/Y/Z, ParVelX/Y/Z, ParTime, ParType, AllAttribute
 //-------------------------------------------------------------------------------------------------------
-void Par_Init_ByFunction_ParticleTest( const long NPar_ThisRank, const long NPar_AllRank,
+void Par_Init_ByFunction_ParticleTest_RT( const long NPar_ThisRank, const long NPar_AllRank,
                                        real *ParMass, real *ParPosX, real *ParPosY, real *ParPosZ,
                                        real *ParVelX, real *ParVelY, real *ParVelZ, real *ParTime,
                                        real *ParType, real *AllAttribute[PAR_NATT_TOTAL] )
@@ -163,7 +163,7 @@ void Par_Init_ByFunction_ParticleTest( const long NPar_ThisRank, const long NPar
 
    if ( MPI_Rank == 0 )    Aux_Message( stdout, "%s ... done\n", __FUNCTION__ );
 
-} // FUNCTION : Par_Init_ByFunction_ParticleTest
+} // FUNCTION : Par_Init_ByFunction_ParticleTest_RT
 
 
 

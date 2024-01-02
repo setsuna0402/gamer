@@ -6,61 +6,62 @@
 // particle attribute of radiation source 
 //========================================================================================
 // Bolometric photon number luminosity
-static real Idx_Luminosity   = Idx_Undefined;    // in [#/s] * TimeUnits/LengthUnits^3 (in ENZO)
-static real Idx_CreationTime = Idx_Undefined;    // When Source is formed in code units
-static real Idx_LifeTime     = Idx_Undefined;    // LifeTime of source in code units
-static real Idx_Energy       = Idx_Undefined;    // Photon's Energy[eV] 
+static FieldIdx_t Idx_Luminosity   = Idx_Undefined;    // in [#/s] * TimeUnits/LengthUnits^3 (in ENZO)
+static FieldIdx_t Idx_CreationTime = Idx_Undefined;    // When Source is formed in code units
+static FieldIdx_t Idx_LifeTime     = Idx_Undefined;    // LifeTime of source in code units
+static FieldIdx_t Idx_Energy       = Idx_Undefined;    // Photon's Energy[eV] 
 // Currently, one RS has one frequency only, to avoid modifying GAMER particle data structure
 // static uint N_EnergyBins;       // the number of energy bins
-// static real *Energy_Bins;            // Energy bins [eV] size = N_EnergyBins
-// static real *SED;               // fractional Spectral energy distribution size = N_EnergyBins
-static real Idx_Dir_X        = Idx_Undefined;    // Normalised direction for the north cone of beamed RS 
-static real Idx_Dir_Y        = Idx_Undefined;    // Normalised direction for the north cone of beamed RS 
-static real Idx_Dir_Z        = Idx_Undefined;    // Normalised direction for the north cone of beamed RS
-// Currently, GAMER's particle attribute only support real.
-// Change real Type back to int Type if GAMER supports it. 
+// static FieldIdx_t *Energy_Bins;            // Energy bins [eV] size = N_EnergyBins
+// static FieldIdx_t *SED;               // fractional Spectral energy distribution size = N_EnergyBins
+static FieldIdx_t Idx_Dir_X        = Idx_Undefined;    // Normalised direction for the north cone of beamed RS 
+static FieldIdx_t Idx_Dir_Y        = Idx_Undefined;    // Normalised direction for the north cone of beamed RS 
+static FieldIdx_t Idx_Dir_Z        = Idx_Undefined;    // Normalised direction for the north cone of beamed RS
+// Currently, GAMER's particle attribute only support FieldIdx_t.
+// Change FieldIdx_t Type back to int Type if GAMER supports it. 
 // RS->Type: 0:isotropic 1:symmetric beam (north and south pole) 2:non-symmetric beam (north pole)
-static real Idx_Type         = Idx_Undefined;    // Type allows for beaming etc.
-static real Idx_OpenAngle    = Idx_Undefined;    // Opening angle of radiation source in degree
+static FieldIdx_t Idx_Type         = Idx_Undefined;    // Type allows for beaming etc.
+static FieldIdx_t Idx_OpenAngle    = Idx_Undefined;    // Opening angle of radiation source in degree
 // preserve these valueables for future application
-// static real Idx_RampTime = Idx_Undefined;     // Time for the source to reach full luminosity
+// static FieldIdx_t Idx_RampTime = Idx_Undefined;     // Time for the source to reach full luminosity
 
 //========================================================================================
 
 //KH 2023/12/25:
 // particle attribute of radiation source 
 //========================================================================================
-static real  Idx_N_Photons_initial    = Idx_Undefined;     // the number of photons created by the RS
-static real  Idx_N_Photons            = Idx_Undefined;     // the actual number of photons in package
-// Currently, GAMER's particle attribute only support real.
-// Change real Type back to int Type if GAMER supports it. 
-static real  Idx_PP_Type              = Idx_Undefined;     // 0 = HI, 1=HeI, 2=HeII, 3=Xray
-static uint  Idx_Operation_Type       = Idx_Undefined;     // 0=alive, 1=extinct, 2=sendtoother 3=outofdomain, 4=delete
-static real  Idx_Energy               = Idx_Undefined;     // Energy of photons in this package [eV]
-static real  Idx_EmissionTimeInterval = Idx_Undefined;     // Duration over which package was emitted
-static real  Idx_BirthTime            = Idx_Undefined;     // Time when package was emitted by RS
-static real  Idx_Radius               = Idx_Undefined;     // Distance travelled
-// Currently, GAMER's particle attribute only support real.
-// Change real HEALPIX_level and HEALPIX_ipix back to int64_t if GAMER supports it. 
-static real Idx_HEALPIX_level         = Idx_Undefined;     // level in HEALPIX terminology
-static real Idx_HEALPIX_ipix          = Idx_Undefined;     // pixel in HEALPIX terminology
-static real Idx_SourceCreationTime    = Idx_Undefined;     // When Radiation source is formed in code units
+static FieldIdx_t  Idx_N_Photons_initial    = Idx_Undefined;     // the number of photons created by the RS
+static FieldIdx_t  Idx_N_Photons            = Idx_Undefined;     // the actual number of photons in package
+// Currently, GAMER's particle attribute only support FieldIdx_t.
+// Change FieldIdx_t Type back to int Type if GAMER supports it. 
+static FieldIdx_t  Idx_PP_Type              = Idx_Undefined;     // 0 = HI, 1=HeI, 2=HeII, 3=Xray
+static FieldIdx_t  Idx_Operation_Type       = Idx_Undefined;     // 0=alive, 1=extinct, 2=sendtoother 3=outofdomain, 4=delete
+// static FieldIdx_t  Idx_Energy               = Idx_Undefined;     // Energy of photons in this package [eV]
+static FieldIdx_t  Idx_EmissionTimeInterval = Idx_Undefined;     // Duration over which package was emitted
+static FieldIdx_t  Idx_BirthTime            = Idx_Undefined;     // Time when package was emitted by RS
+static FieldIdx_t  Idx_Radius               = Idx_Undefined;     // Distance travelled
+// Currently, GAMER's particle attribute only support FieldIdx_t.
+// Change FieldIdx_t HEALPIX_level and HEALPIX_ipix back to int64_t if GAMER supports it. 
+static FieldIdx_t  Idx_HEALPIX_level        = Idx_Undefined;     // level in HEALPIX terminology
+static FieldIdx_t  Idx_HEALPIX_ipix         = Idx_Undefined;     // pixel in HEALPIX terminology
+static FieldIdx_t  Idx_SourceCreationTime   = Idx_Undefined;     // When Radiation source is formed in code units
 // Positions are given by OriginalPostion, radius, healpix level and healpix ipix
-// static real  OriginalPosition[3] ;    // Original Position where package was emitted
-static real  Idx_Ori_Pos_X            = Idx_Undefined ;    // Original Position (code unit) where package was emitted
-static real  Idx_Ori_Pos_Y            = Idx_Undefined ;    // Original Position (code unit) where package was emitted
-static real  Idx_Ori_Pos_Z            = Idx_Undefined ;    // Original Position (code unit) where package was emitted
+// static FieldIdx_t  OriginalPosition[3] ;    // Original Position where package was emitted
+static FieldIdx_t  Idx_Ori_Pos_X            = Idx_Undefined ;    // Original Position (code unit) where package was emitted
+static FieldIdx_t  Idx_Ori_Pos_Y            = Idx_Undefined ;    // Original Position (code unit) where package was emitted
+static FieldIdx_t  Idx_Ori_Pos_Z            = Idx_Undefined ;    // Original Position (code unit) where package was emitted
 // I don't know whether we need to keep these two parameters in GAMER. They are used to trace PP in my code.
-// static real  Idx_CurrentTime          = Idx_Undefined;     // Current Time
-// static real  Idx_TimeatOneRTTimeStep  = Idx_Undefined;     // how long this PP has traveled at a single RT_timestep
+// static FieldIdx_t  Idx_CurrentTime          = Idx_Undefined;     // Current Time
+// static FieldIdx_t  Idx_TimeatOneRTTimeStep  = Idx_Undefined;     // how long this PP has traveled at a single RT_timestep
 // preseved for future application
-// static real  Idx_SourcePositionDiff = Idx_Undefined;    // Radius at which it was radiated (0 = pt src)
+// static FieldIdx_t  Idx_SourcePositionDiff = Idx_Undefined;    // Radius at which it was radiated (0 = pt src)
 
 //========================================================================================
 
 
 // problem-specific global variables
 // =======================================================================================
+/*
 static double ParTest_Dens_Bg;        // background mass density
 static double ParTest_Pres_Bg;        // background pressure
 static double ParTest_Ang_Freq;       // gas angular frequency
@@ -69,7 +70,7 @@ static double ParTest_Ang_Freq;       // gas angular frequency
        double ParTest_Par_Sep;        // the separation between the active particles
        bool   ParTest_Use_Tracers;    // whether or not to include tracers
        bool   ParTest_Use_Massive;    // whether or not to include massive particles
-
+*/
 // =======================================================================================
 
 // problem-specific function prototypes
@@ -80,8 +81,10 @@ void Par_Init_ByFunction_ParticleTest( const long NPar_ThisRank, const long NPar
                                        real *ParType, real *AllAttribute[PAR_NATT_TOTAL] );
 #endif
 
+/*
 bool Flag_ParticleTest( const int i, const int j, const int k, const int lv,
                         const int PID, const double *Threshold );
+*/
 
 //-------------------------------------------------------------------------------------------------------
 // Function    :  AddNewParticleAttribute_RT_Uniform_Rho
@@ -96,6 +99,7 @@ bool Flag_ParticleTest( const int i, const int j, const int k, const int lv,
 //
 // Return      :  None
 //-------------------------------------------------------------------------------------------------------
+#if defined(PARTICLE) && defined (RADIATIVE_TRANSER)
 void AddNewParticleAttribute_RT_Uniform_Rho()
 {
    // RS attributes
@@ -128,8 +132,8 @@ void AddNewParticleAttribute_RT_Uniform_Rho()
       Idx_PP_Type              = AddParticleAttribute( "PP_Type"              );
    if ( Idx_Operation_Type       == Idx_Undefined )
       Idx_Operation_Type       = AddParticleAttribute( "Operation_Type"       );
-   if ( Idx_Energy               == Idx_Undefined )
-      Idx_Energy               = AddParticleAttribute( "Energy"               );
+   // if ( Idx_Energy               == Idx_Undefined )
+   //    Idx_Energy               = AddParticleAttribute( "Energy"               );
    if ( Idx_EmissionTimeInterval == Idx_Undefined )
       Idx_EmissionTimeInterval = AddParticleAttribute( "EmissionTimeInterval" );
    if ( Idx_BirthTime            == Idx_Undefined )
@@ -158,7 +162,7 @@ void AddNewParticleAttribute_RT_Uniform_Rho()
 */
 
 } // FUNCTION : AddNewParticleAttribute_RT_Uniform_Rho
-
+#endif // #if defined(PARTICLE) && defined (RADIATIVE_TRANSER)
 
 //-------------------------------------------------------------------------------------------------------
 // Function    :  Validate
@@ -216,7 +220,7 @@ void Validate()
 //-------------------------------------------------------------------------------------------------------
 void SetParameter()
 {
-
+/*
    if ( MPI_Rank == 0 )    Aux_Message( stdout, "   Setting runtime parameters ...\n" );
 
 
@@ -304,7 +308,7 @@ void SetParameter()
 
 
    if ( MPI_Rank == 0 )    Aux_Message( stdout, "   Setting runtime parameters ... done\n" );
-
+*/
 } // FUNCTION : SetParameter
 
 
@@ -332,7 +336,7 @@ void SetGridIC( real fluid[], const double x, const double y, const double z, co
                 const int lv, double AuxArray[] )
 {
 
-
+/*
    const double dr[2]     = { x - 0.5*amr->BoxSize[0], y - 0.5*amr->BoxSize[1] };
    const double Radius    = sqrt( dr[0]*dr[0] + dr[1]*dr[1] );
 
@@ -359,7 +363,7 @@ void SetGridIC( real fluid[], const double x, const double y, const double z, co
    fluid[MOMY] = MomY;
    fluid[MOMZ] = MomZ;
    fluid[ENGY] = Etot;
-
+*/
 } // FUNCTION : SetGridIC
 #endif // #if ( MODEL == HYDRO )
 
@@ -377,7 +381,7 @@ void SetGridIC( real fluid[], const double x, const double y, const double z, co
 //-------------------------------------------------------------------------------------------------------
 void Init_TestProb_RT_Uniform_Rho()
 {
-
+/*
    if ( MPI_Rank == 0 )    Aux_Message( stdout, "%s ...\n", __FUNCTION__ );
 
 
@@ -406,11 +410,11 @@ void Init_TestProb_RT_Uniform_Rho()
 
 
    if ( MPI_Rank == 0 )    Aux_Message( stdout, "%s ... done\n", __FUNCTION__ );
-
+*/
 } // FUNCTION : Init_TestProb_RT_Uniform_Rho
 
 
-
+/*
 bool Flag_ParticleTest( const int i, const int j, const int k, const int lv,
                         const int PID, const double *Threshold )
 {
@@ -431,3 +435,5 @@ bool Flag_ParticleTest( const int i, const int j, const int k, const int lv,
    return Flag;
 
 }
+*/
+
