@@ -9,7 +9,10 @@
 static FieldIdx_t Idx_Luminosity   = Idx_Undefined;    // in [#/s] * TimeUnits/LengthUnits^3 (in ENZO)
 static FieldIdx_t Idx_CreationTime = Idx_Undefined;    // When Source is formed in code units
 static FieldIdx_t Idx_LifeTime     = Idx_Undefined;    // LifeTime of source in code units
-static FieldIdx_t Idx_Energy       = Idx_Undefined;    // Photon's Energy[eV] 
+//Follow Fish's suggestion, this may works
+static FieldIdx_t Idx_EnergyBins[RT_NBIN];             // Photon's Energy[eV]            
+static FieldIdx_t Idx_SED[RT_NBIN]       ;             // fractional Spectral energy distribution         
+// static FieldIdx_t Idx_Energy       = Idx_Undefined;    // Photon's Energy[eV] 
 // Currently, one RS has one frequency only, to avoid modifying GAMER particle data structure
 // static uint N_EnergyBins;       // the number of energy bins
 // static FieldIdx_t *Energy_Bins;            // Energy bins [eV] size = N_EnergyBins
@@ -36,7 +39,7 @@ static FieldIdx_t  Idx_N_Photons            = Idx_Undefined;     // the actual n
 // Change FieldIdx_t Type back to int Type if GAMER supports it. 
 static FieldIdx_t  Idx_PP_Type              = Idx_Undefined;     // 0 = HI, 1=HeI, 2=HeII, 3=Xray
 static FieldIdx_t  Idx_Operation_Type       = Idx_Undefined;     // 0=alive, 1=extinct, 2=sendtoother 3=outofdomain, 4=delete
-// static FieldIdx_t  Idx_Energy               = Idx_Undefined;     // Energy of photons in this package [eV]
+static FieldIdx_t  Idx_Energy               = Idx_Undefined;     // Energy of photons in this package [eV]
 static FieldIdx_t  Idx_EmissionTimeInterval = Idx_Undefined;     // Duration over which package was emitted
 static FieldIdx_t  Idx_BirthTime            = Idx_Undefined;     // Time when package was emitted by RS
 static FieldIdx_t  Idx_Radius               = Idx_Undefined;     // Distance travelled
@@ -109,8 +112,17 @@ void AddNewParticleAttribute_RT_Uniform_Rho()
       Idx_CreationTime = AddParticleAttribute( "CreationTime" );
    if ( Idx_LifeTime     == Idx_Undefined )
       Idx_LifeTime     = AddParticleAttribute( "LifeTime"     );
-   if ( Idx_Energy       == Idx_Undefined )
-      Idx_Energy       = AddParticleAttribute( "Energy"       );
+   // Follow Fish's suggestions
+   for (int b=0; b<RT_NBIN; b++){
+       char EnergyBins[MAX_STRING];
+       char SED[MAX_STRING];
+       sprintf( EnergyBins, "EnergyBin_%d", b );
+       sprintf( SED       , "SED_%d"      , b );
+       Idx_EnergyBins[b] = AddParticleAttribute( EnergyBins );
+       Idx_SED[b]        = AddParticleAttribute( SED        );
+   }
+   // if ( Idx_Energy       == Idx_Undefined )
+   //    Idx_Energy       = AddParticleAttribute( "Energy"       );
    if ( Idx_Dir_X        == Idx_Undefined )
       Idx_Dir_X        = AddParticleAttribute( "Dir_X"        );
    if ( Idx_Dir_Y        == Idx_Undefined )
@@ -132,8 +144,8 @@ void AddNewParticleAttribute_RT_Uniform_Rho()
       Idx_PP_Type              = AddParticleAttribute( "PP_Type"              );
    if ( Idx_Operation_Type       == Idx_Undefined )
       Idx_Operation_Type       = AddParticleAttribute( "Operation_Type"       );
-   // if ( Idx_Energy               == Idx_Undefined )
-   //    Idx_Energy               = AddParticleAttribute( "Energy"               );
+   if ( Idx_Energy               == Idx_Undefined )
+      Idx_Energy               = AddParticleAttribute( "Energy"               );
    if ( Idx_EmissionTimeInterval == Idx_Undefined )
       Idx_EmissionTimeInterval = AddParticleAttribute( "EmissionTimeInterval" );
    if ( Idx_BirthTime            == Idx_Undefined )
